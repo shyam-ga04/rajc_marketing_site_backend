@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { CompanyDetailsDto } from 'src/dto/company.dto';
+import { CompanyDetailsDto } from '../dto/company.dto';
 import { ApiBody } from '@nestjs/swagger';
 
 @Controller('admin')

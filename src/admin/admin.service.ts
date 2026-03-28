@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
-import { CompanyDetailsDto } from 'src/dto/company.dto';
+import { CompanyDetailsDto } from '../dto/company.dto';
 
 @Injectable()
 export class AdminService {
