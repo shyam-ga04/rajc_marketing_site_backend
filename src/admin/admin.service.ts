@@ -59,27 +59,21 @@ export class AdminService {
   }
 
   async updateCompany(id: number, company: CompanyDetailsDto) {
-    const fields = Object.keys(company);
+    console.log({ id, company });
+    const keyLength = Object.keys(company).length;
 
-    if (fields.length === 0) {
-      throw new Error('No fields provided for update');
-    }
+    let setQuery = '';
 
-    const setQuery = fields
-      .map((field, index) => `${field} = $${index + 1}`)
-      .join(', ');
+    Object.entries(company).map(([key, value], index) => {
+      if (index + 1 < keyLength) {
+        setQuery += `${key} = '${value}', `;
+      } else {
+        setQuery += `${key} = '${value}'`;
+      }
+    });
 
-    const values = fields.map((field) => (company as any)[field]);
-
-    const query = `
-    UPDATE company_details
-    SET ${setQuery}
-    WHERE id = $${fields.length + 1}
-    RETURNING *;
-  `;
-
-    const result = await this.sql.unsafe(query, [...values, id]);
-
+    const result = await this
+      .sql`UPDATE company_details SET ${this.sql(company)} WHERE id = ${id} RETURNING *;`;
     return result[0];
   }
 }
