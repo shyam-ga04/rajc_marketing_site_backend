@@ -6,9 +6,10 @@ import { CompanyDetailsDto } from '../dto/company.dto';
 export class AdminService {
   constructor(@Inject('POSTGRES_POOL') private readonly sql: any) {}
 
-  async getCompany() {
-    const companyData = await this.sql`SELECT * FROM company_details;`;
-    return companyData;
+  async getCompany(id: number) {
+    const companyData = await this
+      .sql`SELECT * FROM company_details WHERE id = ${id};`;
+    return companyData[0];
   }
 
   @ApiBody({ type: CompanyDetailsDto })

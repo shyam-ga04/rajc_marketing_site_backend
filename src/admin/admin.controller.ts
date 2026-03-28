@@ -7,9 +7,9 @@ import { ApiBody } from '@nestjs/swagger';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  @Get('/company')
-  getCompanyDetails() {
-    return this.adminService.getCompany();
+  @Get('/company/:id')
+  getCompanyDetails(@Param('id') id: number) {
+    return this.adminService.getCompany(id);
   }
 
   @Post('/company/create')
