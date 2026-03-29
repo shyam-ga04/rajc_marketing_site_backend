@@ -18,6 +18,11 @@ import { CompanyDetailsDto } from '../dto/company.dto';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  @Get('/enquiry')
+  getEnquiries() {
+    return this.adminService.getEnquiries();
+  }
+
   @Get('/company/:id')
   getCompanyDetails(@Param('id') id: number) {
     return this.adminService.getCompany(id);

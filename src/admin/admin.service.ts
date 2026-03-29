@@ -11,13 +11,16 @@ export class AdminService {
   ) {}
 
   async getCompany(id: number) {
+    console.log('[AdminService] getCompany - id:', id);
     const companyData = await this
       .sql`SELECT * FROM company_details WHERE id = ${id};`;
+    console.log('[AdminService] getCompany - result:', companyData[0]);
     return companyData[0];
   }
 
   @ApiBody({ type: CompanyDetailsDto })
   async createCompany(company: CompanyDetailsDto) {
+    console.log('[AdminService] createCompany - payload:', company);
     const result = await this.sql`
     INSERT INTO company_details (
       founder_name,
@@ -59,26 +62,37 @@ export class AdminService {
     )
     RETURNING *;
   `;
-
+    console.log('[AdminService] createCompany - result:', result[0]);
     return result[0];
   }
 
   async uploadCompanyLogo(id: number, file: Express.Multer.File) {
+    console.log('[AdminService] uploadCompanyLogo - id:', id, '| filename:', file?.originalname, '| size:', file?.size);
     const existing = await this
       .sql`SELECT logo FROM company_details WHERE id = ${id};`;
 
     if (existing[0]?.logo) {
+      console.log('[AdminService] uploadCompanyLogo - deleting existing logo:', existing[0].logo);
       await this.googleDriveService.deleteFile(existing[0].logo);
     }
 
     const logoUrl = await this.googleDriveService.uploadBrandLogo(file);
+    console.log('[AdminService] uploadCompanyLogo - uploaded logo url:', logoUrl);
     const result = await this
       .sql`UPDATE company_details SET logo = ${logoUrl} WHERE id = ${id} RETURNING *;`;
+    console.log('[AdminService] uploadCompanyLogo - result:', result[0]);
     return result[0];
   }
 
+  async getEnquiries() {
+    console.log('[AdminService] getEnquiries - fetching all enquiries');
+    const result = await this.sql`SELECT * FROM enquiry ORDER BY id DESC;`;
+    console.log('[AdminService] getEnquiries - total records:', result.length);
+    return result;
+  }
+
   async updateCompany(id: number, company: CompanyDetailsDto) {
-    console.log({ id, company });
+    console.log('[AdminService] updateCompany - id:', id, '| payload:', company);
     const keyLength = Object.keys(company).length;
 
     let setQuery = '';
@@ -93,6 +107,7 @@ export class AdminService {
 
     const result = await this
       .sql`UPDATE company_details SET ${this.sql(company)} WHERE id = ${id} RETURNING *;`;
+    console.log('[AdminService] updateCompany - result:', result[0]);
     return result[0];
   }
 }
