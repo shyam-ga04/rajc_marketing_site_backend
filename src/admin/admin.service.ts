@@ -1,10 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
 import { CompanyDetailsDto } from '../dto/company.dto';
+import { GoogleDriveService } from '../google-drive/google-drive.service';
 
 @Injectable()
 export class AdminService {
-  constructor(@Inject('POSTGRES_POOL') private readonly sql: any) {}
+  constructor(
+    @Inject('POSTGRES_POOL') private readonly sql: any,
+    private readonly googleDriveService: GoogleDriveService,
+  ) {}
 
   async getCompany(id: number) {
     const companyData = await this
@@ -56,6 +60,20 @@ export class AdminService {
     RETURNING *;
   `;
 
+    return result[0];
+  }
+
+  async uploadCompanyLogo(id: number, file: Express.Multer.File) {
+    const existing = await this
+      .sql`SELECT logo FROM company_details WHERE id = ${id};`;
+
+    if (existing[0]?.logo) {
+      await this.googleDriveService.deleteFile(existing[0].logo);
+    }
+
+    const logoUrl = await this.googleDriveService.uploadBrandLogo(file);
+    const result = await this
+      .sql`UPDATE company_details SET logo = ${logoUrl} WHERE id = ${id} RETURNING *;`;
     return result[0];
   }
 

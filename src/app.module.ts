@@ -5,10 +5,11 @@ import { DatabaseModule } from './database/database.module';
 import { AdminService } from './admin/admin.service';
 import { AdminController } from './admin/admin.controller';
 import { AdminModule } from './admin/admin.module';
+import { GoogleDriveService } from './google-drive/google-drive.service';
 
 @Module({
-  imports: [DatabaseModule, AdminModule, AdminModule],
-  controllers: [AppController, AdminController, AdminController],
-  providers: [AppService, AdminService, AdminService],
+  imports: [DatabaseModule, AdminModule],
+  controllers: [AppController, AdminController],
+  providers: [AppService, AdminService, GoogleDriveService],
 })
 export class AppModule {}

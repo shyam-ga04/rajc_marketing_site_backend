@@ -91,4 +91,9 @@ export class CompanyDetailsDto {
   @IsOptional()
   @IsString()
   company_founded_year?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  logo?: string;
 }
