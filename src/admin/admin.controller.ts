@@ -13,6 +13,7 @@ import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { memoryStorage } from 'multer';
 import { AdminService } from './admin.service';
 import { CompanyDetailsDto } from '../dto/company.dto';
+import { UpdateEnquiryDto } from '../dto/enquiry.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -21,6 +22,12 @@ export class AdminController {
   @Get('/enquiry')
   getEnquiries() {
     return this.adminService.getEnquiries();
+  }
+
+  @Patch('/enquiry/update/:id')
+  @ApiBody({ type: UpdateEnquiryDto })
+  updateEnquiry(@Param('id') id: string, @Body() dto: UpdateEnquiryDto) {
+    return this.adminService.updateEnquiry(Number(id), dto);
   }
 
   @Get('/company/:id')

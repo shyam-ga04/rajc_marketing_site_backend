@@ -1,5 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
+
+export class UpdateEnquiryDto {
+  @ApiProperty({ enum: ['New', 'Inprogress', 'Resolved'] })
+  @IsIn(['New', 'Inprogress', 'Resolved'])
+  status: string;
+}
 
 export class EnquiryDto {
   @ApiProperty()

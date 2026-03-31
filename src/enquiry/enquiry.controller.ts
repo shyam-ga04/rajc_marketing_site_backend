@@ -7,7 +7,7 @@ import { EnquiryDto } from '../dto/enquiry.dto';
 export class EnquiryController {
   constructor(private readonly enquiryService: EnquiryService) {}
 
-  @Post('/create/enquiry')
+  @Post('/create')
   @ApiBody({ type: EnquiryDto })
   createEnquiry(@Body() enquiry: EnquiryDto) {
     return this.enquiryService.createEnquiry(enquiry);

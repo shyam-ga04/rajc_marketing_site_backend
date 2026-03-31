@@ -15,7 +15,8 @@ export class EnquiryService {
         email,
         city,
         budget_rate,
-        message
+        message,
+        status
       )
       VALUES (
         ${enquiry.company_id},
@@ -24,7 +25,8 @@ export class EnquiryService {
         ${enquiry.email},
         ${enquiry.city},
         ${enquiry.budget_rate},
-        ${enquiry.message}
+        ${enquiry.message},
+        ${'New'}
       )
       RETURNING *;
     `;

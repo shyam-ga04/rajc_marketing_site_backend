@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
 import { CompanyDetailsDto } from '../dto/company.dto';
+import { UpdateEnquiryDto } from '../dto/enquiry.dto';
 import { GoogleDriveService } from '../google-drive/google-drive.service';
 
 @Injectable()
@@ -89,6 +90,14 @@ export class AdminService {
     const result = await this.sql`SELECT * FROM enquiry ORDER BY id DESC;`;
     console.log('[AdminService] getEnquiries - total records:', result.length);
     return result;
+  }
+
+  async updateEnquiry(id: number, dto: UpdateEnquiryDto) {
+    console.log('[AdminService] updateEnquiry - id:', id, '| payload:', dto);
+    const result = await this
+      .sql`UPDATE enquiry SET status = ${dto.status} WHERE id = ${id} RETURNING *;`;
+    console.log('[AdminService] updateEnquiry - result:', result[0]);
+    return result[0];
   }
 
   async updateCompany(id: number, company: CompanyDetailsDto) {
