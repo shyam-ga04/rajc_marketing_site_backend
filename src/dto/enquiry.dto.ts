@@ -2,8 +2,8 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateEnquiryDto {
-  @ApiProperty({ enum: ['New', 'Inprogress', 'Resolved'] })
-  @IsIn(['New', 'Inprogress', 'Resolved'])
+  @ApiProperty({ enum: ['New', 'In Progress', 'Resolved'] })
+  @IsIn(['New', 'In Progress', 'Resolved'])
   status: string;
 }
 

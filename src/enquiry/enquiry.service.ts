@@ -26,7 +26,7 @@ export class EnquiryService {
         ${enquiry.city},
         ${enquiry.budget_rate},
         ${enquiry.message},
-        ${'New'}
+        'New'
       )
       RETURNING *;
     `;

@@ -87,7 +87,7 @@ export class AdminService {
 
   async getEnquiries() {
     console.log('[AdminService] getEnquiries - fetching all enquiries');
-    const result = await this.sql`SELECT * FROM enquiry ORDER BY id DESC;`;
+    const result = await this.sql`SELECT * FROM enquiry ORDER BY created_at DESC;`;
     console.log('[AdminService] getEnquiries - total records:', result.length);
     return result;
   }
