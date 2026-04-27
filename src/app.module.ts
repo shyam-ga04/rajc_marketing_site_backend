@@ -9,10 +9,13 @@ import { GoogleDriveService } from './google-drive/google-drive.service';
 import { EnquiryModule } from './enquiry/enquiry.module';
 import { EnquiryController } from './enquiry/enquiry.controller';
 import { EnquiryService } from './enquiry/enquiry.service';
+import { ServicesModule } from './services/services.module';
+import { ServicesController } from './services/services.controller';
+import { ServicesService } from './services/services.service';
 
 @Module({
-  imports: [DatabaseModule, AdminModule, EnquiryModule],
-  controllers: [AppController, AdminController, EnquiryController],
-  providers: [AppService, AdminService, GoogleDriveService, EnquiryService],
+  imports: [DatabaseModule, AdminModule, EnquiryModule, ServicesModule],
+  controllers: [AppController, AdminController, EnquiryController, ServicesController],
+  providers: [AppService, AdminService, GoogleDriveService, EnquiryService, ServicesService],
 })
 export class AppModule {}

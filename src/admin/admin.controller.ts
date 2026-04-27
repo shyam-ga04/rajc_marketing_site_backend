@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -14,6 +15,7 @@ import { memoryStorage } from 'multer';
 import { AdminService } from './admin.service';
 import { CompanyDetailsDto } from '../dto/company.dto';
 import { UpdateEnquiryDto } from '../dto/enquiry.dto';
+import { CreateServiceDto, UpdateServiceDto } from '../dto/services.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -63,5 +65,34 @@ export class AdminController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     return this.adminService.uploadCompanyLogo(Number(id), file);
+  }
+
+  // ─── Services CRUD ───────────────────────────────────────────────────────────
+
+  @Get('/services')
+  getAllServices() {
+    return this.adminService.getAllServices();
+  }
+
+  @Get('/services/:slug')
+  getServiceBySlug(@Param('slug') slug: string) {
+    return this.adminService.getServiceBySlug(slug);
+  }
+
+  @Post('/services/create')
+  @ApiBody({ type: CreateServiceDto })
+  createService(@Body() dto: CreateServiceDto) {
+    return this.adminService.createService(dto);
+  }
+
+  @Patch('/services/update/:slug')
+  @ApiBody({ type: UpdateServiceDto })
+  updateService(@Param('slug') slug: string, @Body() dto: UpdateServiceDto) {
+    return this.adminService.updateService(slug, dto);
+  }
+
+  @Delete('/services/delete/:slug')
+  deleteService(@Param('slug') slug: string) {
+    return this.adminService.deleteService(slug);
   }
 }
