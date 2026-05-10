@@ -6,16 +6,18 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiQuery } from '@nestjs/swagger';
 import { memoryStorage } from 'multer';
 import { AdminService } from './admin.service';
 import { CompanyDetailsDto } from '../dto/company.dto';
 import { UpdateEnquiryDto } from '../dto/enquiry.dto';
 import { CreateServiceDto, UpdateServiceDto } from '../dto/services.dto';
+import { CreateProjectDto, UpdateProjectDto } from '../dto/projects.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -94,5 +96,35 @@ export class AdminController {
   @Delete('/services/delete/:slug')
   deleteService(@Param('slug') slug: string) {
     return this.adminService.deleteService(slug);
+  }
+
+  // ─── Projects CRUD ───────────────────────────────────────────────────────────
+
+  @Get('/projects')
+  @ApiQuery({ name: 'search', required: false })
+  getAllProjects(@Query('search') search?: string) {
+    return this.adminService.getAllProjects(search);
+  }
+
+  @Get('/projects/:id')
+  getProjectById(@Param('id') id: string) {
+    return this.adminService.getProjectById(id);
+  }
+
+  @Post('/projects/create')
+  @ApiBody({ type: CreateProjectDto })
+  createProject(@Body() dto: CreateProjectDto) {
+    return this.adminService.createProject(dto);
+  }
+
+  @Patch('/projects/update/:id')
+  @ApiBody({ type: UpdateProjectDto })
+  updateProject(@Param('id') id: string, @Body() dto: UpdateProjectDto) {
+    return this.adminService.updateProject(id, dto);
+  }
+
+  @Delete('/projects/delete/:id')
+  deleteProject(@Param('id') id: string) {
+    return this.adminService.deleteProject(id);
   }
 }

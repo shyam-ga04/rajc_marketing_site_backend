@@ -3,6 +3,7 @@ import { ApiBody } from '@nestjs/swagger';
 import { CompanyDetailsDto } from '../dto/company.dto';
 import { UpdateEnquiryDto } from '../dto/enquiry.dto';
 import { CreateServiceDto, UpdateServiceDto } from '../dto/services.dto';
+import { CreateProjectDto, UpdateProjectDto } from '../dto/projects.dto';
 import { GoogleDriveService } from '../google-drive/google-drive.service';
 
 @Injectable()
@@ -252,5 +253,54 @@ export class AdminService {
     const result = await this.sql`DELETE FROM services WHERE slug = ${slug} RETURNING *;`;
     console.log('[AdminService] deleteService - deleted:', result[0]?.slug);
     return { message: `Service '${slug}' deleted successfully`, deleted: result[0] };
+  }
+
+  // ─── Projects CRUD ───────────────────────────────────────────────────────────
+
+  async getAllProjects(search?: string) {
+    console.log('[AdminService] getAllProjects - search:', search);
+    if (search) {
+      return this.sql`
+        SELECT * FROM projects 
+        WHERE name ILIKE ${'%' + search + '%'} 
+           OR location ILIKE ${'%' + search + '%'}
+        ORDER BY created_at DESC;
+      `;
+    }
+    return this.sql`SELECT * FROM projects ORDER BY created_at DESC;`;
+  }
+
+  async getProjectById(id: string) {
+    console.log('[AdminService] getProjectById - id:', id);
+    const result = await this.sql`SELECT * FROM projects WHERE id = ${id};`;
+    return result[0];
+  }
+
+  async createProject(dto: CreateProjectDto) {
+    console.log('[AdminService] createProject - payload:', dto);
+    const result = await this.sql`
+      INSERT INTO projects ${this.sql(dto)}
+      RETURNING *;
+    `;
+    console.log('[AdminService] createProject - result:', result[0]?.id);
+    return result[0];
+  }
+
+  async updateProject(id: string, dto: UpdateProjectDto) {
+    console.log('[AdminService] updateProject - id:', id, '| payload:', dto);
+    const { id: _, ...updateData } = dto;
+    const result = await this.sql`
+      UPDATE projects SET ${this.sql(updateData)}, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${id}
+      RETURNING *;
+    `;
+    console.log('[AdminService] updateProject - result:', result[0]?.id);
+    return result[0];
+  }
+
+  async deleteProject(id: string) {
+    console.log('[AdminService] deleteProject - id:', id);
+    const result = await this.sql`DELETE FROM projects WHERE id = ${id} RETURNING *;`;
+    return { message: `Project with id '${id}' deleted successfully`, deleted: result[0] };
   }
 }

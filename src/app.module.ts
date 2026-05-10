@@ -12,10 +12,32 @@ import { EnquiryService } from './enquiry/enquiry.service';
 import { ServicesModule } from './services/services.module';
 import { ServicesController } from './services/services.controller';
 import { ServicesService } from './services/services.service';
+import { ProjectsModule } from './projects/projects.module';
+import { ProjectsController } from './projects/projects.controller';
+import { ProjectsService } from './projects/projects.service';
 
 @Module({
-  imports: [DatabaseModule, AdminModule, EnquiryModule, ServicesModule],
-  controllers: [AppController, AdminController, EnquiryController, ServicesController],
-  providers: [AppService, AdminService, GoogleDriveService, EnquiryService, ServicesService],
+  imports: [
+    DatabaseModule,
+    AdminModule,
+    EnquiryModule,
+    ServicesModule,
+    ProjectsModule,
+  ],
+  controllers: [
+    AppController,
+    AdminController,
+    EnquiryController,
+    ServicesController,
+    ProjectsController,
+  ],
+  providers: [
+    AppService,
+    AdminService,
+    GoogleDriveService,
+    EnquiryService,
+    ServicesService,
+    ProjectsService,
+  ],
 })
 export class AppModule {}
